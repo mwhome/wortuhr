@@ -413,6 +413,9 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20201216
+added led-layout horizontal2 
+translatet web frontend to german
 
 20200709:
 Turn off timer when it is running.
