@@ -115,7 +115,7 @@
 #define DHT_HUMIDITY_OFFSET -2.0
 
 //#define RTC_BACKUP
-#define RTC_TEMPERATURE_OFFSET  -19
+#define RTC_TEMPERATURE_OFFSET  -1.25
 
 #define LDR
 //#define LDR_IS_INVERSE
@@ -138,8 +138,8 @@
 #define IR_LETTER_Y 10
 
 //#define LED_LAYOUT_HORIZONTAL_1
-#define LED_LAYOUT_HORIZONTAL_2
-//#define LED_LAYOUT_HORIZONTAL_3
+//#define LED_LAYOUT_HORIZONTAL_2
+#define LED_LAYOUT_HORIZONTAL_3
 //#define LED_LAYOUT_VERTICAL_1
 //#define LED_LAYOUT_VERTICAL_2
 
@@ -165,13 +165,13 @@
 //#define UPDATE_INFOFILE "/qlockwork/updateinfo.json"
 
 // ESP8266
-#define PIN_IR_RECEIVER  12 // D6 (no interrupt)
+#define PIN_IR_RECEIVER  16 // D0 
 #define PIN_WIRE_SCL     05 // D1 SCL
 #define PIN_WIRE_SDA     04 // D2 SDA 04
 #define PIN_MODE_BUTTON  00 // D3 LOW_Flash
 #define PIN_LED          02 // D4 ESP8266_LED
 #define PIN_BUZZER       14 // D5
-#define PIN_DHT22        16 // D0
+#define PIN_DHT22        12 // D6
 #define PIN_LEDS_CLOCK   13 // D7
 #define PIN_LEDS_DATA    15 // D8 15
 #define PIN_LDR          A0 // ADC
