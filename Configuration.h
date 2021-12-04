@@ -10,7 +10,7 @@
 // Software settings
 //******************************************************************************
 
-#define HOSTNAME "WortUhr"
+#define HOSTNAME "Nicoles WortUhr"
 #define WIFI_SETUP_TIMEOUT 120
 #define WIFI_AP_PASS "12345678"
 #define OTA_PASS "1234"
@@ -35,7 +35,7 @@
 #define SHOW_MODE_TEST
 
 #define APIKEY "10adf459bbfc2d2fb67033864f23f683"
-#define LOCATION "Renchen, DE"
+#define LOCATION "Offenburg, DE"
 //#define LOCATION "Zurich, CH"
 //#define LOCATION "Hong Kong, HK"
 
@@ -115,12 +115,12 @@
 #define DHT_HUMIDITY_OFFSET -2.0
 
 //#define RTC_BACKUP
-#define RTC_TEMPERATURE_OFFSET  -1.25
+#define RTC_TEMPERATURE_OFFSET  -19.6
 
 #define LDR
 //#define LDR_IS_INVERSE
 
-//#define BUZZER
+#define BUZZER
 #define BUZZTIME_ALARM_1 30
 #define BUZZTIME_ALARM_2 30
 #define BUZZTIME_TIMER 30
@@ -138,8 +138,8 @@
 #define IR_LETTER_Y 10
 
 //#define LED_LAYOUT_HORIZONTAL_1
-//#define LED_LAYOUT_HORIZONTAL_2
-#define LED_LAYOUT_HORIZONTAL_3
+#define LED_LAYOUT_HORIZONTAL_2
+//#define LED_LAYOUT_HORIZONTAL_3
 //#define LED_LAYOUT_VERTICAL_1
 //#define LED_LAYOUT_VERTICAL_2
 
