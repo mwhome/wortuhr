@@ -6,7 +6,7 @@ An advanced firmware for a DIY "word-clock".
 Qlockwork is an ESP8266 (NodeMCU or WeMos D1 mini) firmware (under GPL license) for a so called "word-clock".
 
 The clock adjusts the time and date once every hour via NTP with a time server on the Internet.
-If an RTC is installed, the time of the ESP is also set from the RTC every minute.
+If an RTC is installed, the time of the ESP is also set from the RTC via the SyncProvider.
 
 At startup the clock performs a short self test.
 The sequence of the colors should be: red, green, blue and white. If not, your LED driver setup is wrong.
@@ -41,7 +41,7 @@ Disclaimer: Qlockwork uses lots of third party libraries.
             You use the Qlockwork firmware at your own risk.
 
 You can find the QLOCKWORK web-site here:
-http://tmw-it.ch/qlockwork/
+http://thorsten-wahl.ch/qlockwork/
 
 You can download the latest version of the firmware here:
 https://github.com/ch570512/Qlockwork
@@ -53,7 +53,7 @@ http://diskussion.christians-bastel-laden.de/viewtopic.php?f=23&t=2843
 Top features:
 ******************************************************************************
 
-Almost no electronics needed. Only an ESP32 and an LED-stripe.
+Almost no electronics needed. Only an ESP8266 and an LED-stripe.
 Optional support for LDR, Buzzer, temperature and humidity sensor, IR-remote and buttons.
 Support for NeoPixel (RGB and RGBW) LED-stripes.
 Support for various horizontal and vertical LED layouts. 3 layouts included.
@@ -63,11 +63,12 @@ Adaptive brightness control when using an LDR.
 Indoor temperature from RTC or temperature and humidity from DHT sensor.
 Outdoor temperature and humidity from OpenWeather. You need an APIKey from OpenWeather to use this feature.
 Visualisation of moonphase.
+Show sunrise and sunset times with animation.
 Textfeed for events and infos, local and over the web.
 Support for 16 frontcovers (Original and DIY) in 6 languages.
 25 Colors.
 99 minute timer.
-2 Alarmtimes for every day of the week.
+2 Alarms with weekday selection.
 NTP timesync with timezone support.
 Automatic adjustment of daylight saving time.
 USB and Over-the-air firmware updates.
@@ -81,11 +82,13 @@ AM/PM
 Seconds
 Weekday
 Date
+Sunrise (needs OpenWeather)
+Sunset (needs OpenWeather)
 Moonphase
-Room temperature (RTX or DHT22)
-Room humidity (DHT22)
-Outdoor temperature (OpenWeather)
-Outdoor humidity (OpenWeather)
+Room temperature (needs RTX or DHT22)
+Room humidity (needs DHT22)
+Outdoor temperature (needs OpenWeather)
+Outdoor humidity (needs OpenWeather)
 Timer
 LED-test
 Red
@@ -97,17 +100,17 @@ White
 Needed libraries: (recommended/tested versions in brackets)
 ******************************************************************************
 
-Arduino IDE for Windows (1.8.12)
-esp8266 by ESP8266 Community (2.7.2)
+Arduino IDE for Windows (1.8.19)
+esp8266 by ESP8266 Community (3.0.2)
 Arduino_JSON by Arduino (0.1.0)
-Adafruit NeoPixel by Adafruit (1.5.0)
-Adafruit Unified Sensor by Adafruit (1.1.4)
+Adafruit NeoPixel by Adafruit (1.10.4)
+Adafruit Unified Sensor by Adafruit (1.1.5)
 ArduinoHttpClient by Arduino (0.4.0)
-ArduinoOTA by Juraj Andressy (1.0.4)
-DHT sensor library by Adafruit (1.3.10)
-DS3232RTC by Jack Christensen (1.2.12)
-IRremoteESP8266 by Sebastien Warin (2.7.8)
-Time by Michael Margolis (1.6.0)
+ArduinoOTA by Juraj Andressy (1.0.7)
+DHT sensor library by Adafruit (1.4.3)
+DS3232RTC by Jack Christensen (2.0.0)
+IRremoteESP8266 by Sebastien Warin (2.8.1)
+Time by Michael Margolis (1.6.1)
 
 Included in source is the Timezone library from Jack Christensen
 and WiFiManager by AlexT.
@@ -154,6 +157,8 @@ Display AM/PM:                      Indicates whether it is AM or PM.
 Seconds:                            Shows the seconds.
 Weekday:                            Shows the weekday in local language.
 Date:                               Shows day and month.
+Sunrise:                            Time of sunrise.
+Sunset:                             Time of sunset.
 Moonphase:                          Shows the moonphase.
 Room temperature:                   Display of the measured temperature in the room (only with RTC or DHT22).
 Room humidity:                      Display of the measured humidity in the room (only with DHT22).
@@ -196,6 +201,7 @@ Configuration.h - Software settings:
 ******************************************************************************
 
 #define HOSTNAME                    The name of the clock.
+#define WEBSITE_TITLE               Title on top of the clocks webpage.
 #define WIFI_SETUP_TIMEOUT          Time in seconds set up the WiFiManager or search for a WLAN.
                                     If no WLAN is connected the clock enters AP mode.
                                     You can control the clock if you connect your phone or tablet to this accesspoint.
@@ -209,6 +215,7 @@ Configuration.h - Software settings:
 #define NONE_TECHNICAL_ZERO         Displays the zero without the diagonal line.
 #define AUTO_MODECHANGE_TIME        Time in seconds to wait between switching from time to temperature.
 #define FEED_SPEED                  Feed delay in milliseconds. 120 is a good start.
+#define SUNSET_SUNRISE_SPEED        Milliseconds delay between sunrise screen -> sunrise time and sunset screen -> sunset time
 #define EVENT_TIME                  Time in seconds to wait between showing events. Comment to turn off events.
 #define ALARM_LED_COLOR             Color of the alarm LED. If not defined the display color will be used.
                                     The possible colors are:
@@ -218,15 +225,19 @@ Configuration.h - Software settings:
 #define ABUSE_CORNER_LED_FOR_ALARM  Use the upper right minute LED as alarm LED. Only works if ALARM_LED_COLOR is defined.
                                     If no alarm or timer is set the LED is used as expected.
 #define DEDICATION                  Show a text on the clocks webpage.
+
 #define POWERON_SELFTEST            Test LEDs at startup. Colors are: white, red, green, blue. In this order.
-#define SHOW_MODE_AMPM
-#define SHOW_MODE_SECONDS
-#define SHOW_MODE_WEEKDAY
-#define SHOW_MODE_DATE
-#define SHOW_MODE_MOONPHASE
-#define SHOW_MODE_TEST
+#define SHOW_MODE_AMPM              Show AM/PM.
+#define SHOW_MODE_SECONDS           Show seconds.
+#define SHOW_MODE_WEEKDAY           Show weekday.
+#define SHOW_MODE_DATE              Show date.
+#define SHOW_MODE_MOONPHASE         Show moonphase.
+#define SHOW_MODE_SUNRISE_SUNSET    Show sunrise and sunset times.
+#define SHOW_MODE_TEST              Show tests.
+
 #define APIKEY                      Your OpenWeather API key.
 #define LOCATION                    Your location for OpenWeather.
+
 #define TIMEZONE_*                  The time zone in which the clock is located. Important for the UTC offset and the
                                     summer/winter time change.
 #define FRONTCOVER_*                Frontcover of the clock. This also sets the language of the menu and the website.
@@ -237,9 +248,9 @@ Configuration.h - Hardware settings:
 
 #define ESP_LED                     Displays the function using the LED on the ESP. It flashes once a second.
 
-#define ONOFF_BUTTON               Use a hardware on/off-button.
-#define MODE_BUTTON                Use a hardware mode-button.
-#define TIME_BUTTON                Use a hardware time-button. Debug to serial will not work if defined.
+#define ONOFF_BUTTON                Use a hardware on/off-button.
+#define MODE_BUTTON                 Use a hardware mode-button.
+#define TIME_BUTTON                 Use a hardware time-button. Debug to serial will not work if defined.
 
 #define SENSOR_DHT22                Use a DHT22 sensor module (not the plain sensor) for room temperature and humidity.
 #define DHT_TEMPERATURE_OFFSET      Sets how many degrees the measured room temperature (+ or -) should be corrected.
@@ -271,9 +282,13 @@ Configuration.h - Hardware settings:
                                     If you see more than one try the code which is changing from button to button.
                                     DEBUG has to be defined to show you the code.
 
-#define NEOPIXEL_TYPE               Specifies the NeoPixel driver. 400kHz, 800kHz, GRB, RGB, GRBW and RGBW.
+#define NEOPIXEL_RGB                Select if your LEDs are RGB only.
+#define NEOPIXEL_RGBW               Select if your LEDs have a distinct white channel (RGBW).
 
-#define LED_LAYOUT_HORIZONTAL_1     Horizontal and corner LEDs at the end of the strip. (As seen from the front.)
+#define NEOPIXEL_TYPE               Specifies the NeoPixel driver. 400kHz, 800kHz, GRB, RGB, GRBW, RGBW...
+                                    See \libraries\Adafruit_NeoPixel.h for help.
+
+#define LED_LAYOUT_HORIZONTAL_1     Horizontal and corner and alarm LEDs at the end of the strip. (As seen from the front.)
 
 111                    114                    112
    000 001 002 003 004 005 006 007 008 009 010
@@ -286,9 +301,9 @@ Configuration.h - Hardware settings:
    087 086 085 084 083 082 081 080 079 078 077
    088 089 090 091 092 093 094 095 096 097 098
    109 108 107 106 105 104 103 102 101 100 099
-110                                            113
+110                                           113
 
-#define LED_LAYOUT_VERTICAL_1       Vertical and corner LEDs within the strip. (As seen from the front.)
+#define LED_LAYOUT_VERTICAL_1       Vertical and corner and alarm LEDs (almost) within the strip. (As seen from the front.)
 
 000                    114                    102
    001 021 022 041 042 061 062 081 082 101 103
@@ -303,7 +318,7 @@ Configuration.h - Hardware settings:
    010 012 031 032 051 052 071 072 091 092 112
 011                                           113
 
-#define LED_LAYOUT_VERTICAL_2       Vertical and corner LEDs at the end of the strip. (As seen from the front.)
+#define LED_LAYOUT_VERTICAL_2       Vertical and corner and alarm LEDs at the end of the strip. (As seen from the front.)
 
 112                    111                    110
    009 010 029 030 049 050 069 070 089 090 109
@@ -318,25 +333,40 @@ Configuration.h - Hardware settings:
    000 019 020 039 040 059 060 079 080 099 100
 113                                           114
 
+#define LED_LAYOUT_VERTICAL_3       Vertical and corner and alarm LEDs at the end of the strip. (As seen from the front.)
+
+111                    114                    110
+   009 010 029 030 049 050 069 070 089 090 109
+   008 011 028 031 048 051 068 071 088 091 108
+   007 012 027 032 047 052 067 072 087 092 107
+   006 013 026 033 046 053 066 073 086 093 106
+   005 014 025 034 045 054 065 074 085 094 105
+   004 015 024 035 044 055 064 075 084 095 104
+   003 016 023 036 043 056 063 076 083 096 103
+   002 017 022 037 042 057 062 077 082 097 102
+   001 018 021 038 041 058 061 078 081 098 101
+   000 019 020 039 040 059 060 079 080 099 100
+112                                           113
+
 ******************************************************************************
 Configuration.h - Misc:
 ******************************************************************************
 
-#define DEBUG                       Show debug infos in the serial console
-#define DEBUG_WEB                   Show debug infos on the web page
-#define DEBUG_MATRIX                Renders the output of the matrix for the German front in the serial console
-#define DEBUG_FPS                   Show number of loops per second in the serial console
+#define DEBUG                       Show debug infos in the serial console.
+#define DEBUG_WEB                   Show debug infos on the web page.
+#define DEBUG_MATRIX                Renders the output of the matrix for the German front in the serial console.
+#define DEBUG_FPS                   Show number of loops per second in the serial console.
 
-#define SYSLOGSERVER                Turn logging to a syslogserver on/off
-#define SYSLOGSERVER_SERVER         Address of the syslogserver
-#define SYSLOGSERVER_PORT           Port of the syslogserver
+#define SYSLOGSERVER                Turn logging to a syslogserver on/off.
+#define SYSLOGSERVER_SERVER         Address of the syslogserver.
+#define SYSLOGSERVER_PORT           Port of the syslogserver.
 
 #define UPDATE_INFO_*               The update info periodically anonymously checks if there is a firmwareupdate
-                                    available. No user data is send to the host. Comment if you do not want this info
-#define UPDATE_INFOSERVER           Address of the updateinfo server
-#define UPDATE_INFOFILE             Path and name of the updateinfo file
+                                    available. No user data is send to the host. Comment if you do not want this info.
+#define UPDATE_INFOSERVER           Address of the updateinfo server.
+#define UPDATE_INFOFILE             Path and name of the updateinfo file.
 
-#define SERIAL_SPEED                Serial port speed for the console
+#define SERIAL_SPEED                Serial port speed for the console.
 
 ******************************************************************************
 Events.h
@@ -397,22 +427,72 @@ day=dd                              Set day of event
 month=mm                            Set month of event
 color=0                             Color of the eventtext, 0 to 24 (optional)
 text=text                           Set text of event, max. 40 characters
-                                    e.g.: http://your_clocks_ip/setEvent?day=27&month=10&color=5&text=This%20is%20an%20event.
+                                    e.g.: http://192.168.1.10/setEvent?day=27&month=10&color=5&text=This%20is%20an%20event.
 
 http://your_clocks_ip/showText?
 buzzer=1                            Number of times the buzzer will beep before showing the text (optional)
 color=0                             Color of the textfeed, 0 to 24 (optional)
 text=text                           Set text of feed, max. 80 characters
-                                    e.g.: http://your_clocks_ip/showText?buzzer=2&color=1&text=Instant%20text%20on%20Qlockwork!
+                                    e.g.: http://192.168.1.10/showText?buzzer=2&color=1&text=Instant%20text%20on%20Qlockwork!
 
 http://your_clocks_ip/control?
 mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), ...
                                     mode=17 (off, if all other modes are enabled) -- see modes.h and count.
-                                    e.g.: http://your_clocks_ip/control?mode=6
+                                    e.g.: http://192.168.1.10/control?mode=6
 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+
+20220830:
+Fixed the issue that adaptive brightness control (ABC) can not be disabled in settings.
+
+20220429:
+Moved the web-site from "tmw-it.ch" to "thorsten-wahl.ch"
+The UPDATE_INFOSERVER also moved there. Please update your Configuration.h
+
+20220411:
+Fixed a bug causing the project not to compile in a certain configuration.
+<Qlockwork.ino:1504:33: error: 'save_color_sunrise_sunset' was not declared in this scope>
+
+20220312:
+Clocks brightness from LDR is now transitioning smoothly between values.
+Sunrise and sunset now uses global timeout to switch back to time.
+Fixed a bug causing the RTC not to work.
+Added option to select RBG or RGBW for LedDriver.
+Using transition "Move up" in menus. "Fade" was not working too well.
+
+20220311:
+Fixed a bug preventing compilation using esp8266 by ESP8266 Community (3.0.2).
+IDE change from VisualMicro to free Visual Studio Code.
+
+20220310:
+Mode sunrise and sunset (Thanks to GenosseFlosse).
+
+20210422:
+Reduced the watchdog resets (Thanks to espuno).
+
+20210321:
+Fixed openweather bug for more than one weathercondition (Thanks to Manfred).
+Setting RTC vom Web should be LT - not UTC (Thanks to Manfred).
+Clear all LEDs before exiting test pattern (Thanks to espuno).
+Calculate white channel for NEO_WRGB (Thanks to Manfred).
+New LED_LAYOUT_VERTICAL_3 (Like vertical 2 but alarm LED = 114).
+
+20210224:
+WLAN RSSI on WEB page in Debug.
+// -30 dBm Ausgezeichnet Dies ist die maximal erreichbare und für jedes Einsatzszenario geeignete Signalstärke.
+// -50 dBm Ausgezeichnet Dieser ausgezeichnete Signalpegel ist für alle Netzwerkanwendungen geeignet.
+// -65 dBm Sehr gut Empfohlen für die Unterstützung von Smartphones und Tablets.
+// -67 dBm Sehr gut Diese Signalstärke reicht für Voice-over-IP und Video-Streaming aus.
+// -70 dBm Akzeptabel Diese Stufe ist die minimale Signalstärke um eine zuverlässige Paket-Zustellung zu gewährleisten.
+// -80 dBm Schlecht Ermöglicht grundlegende Konnektivität, die Paket-Zustellung ist jedoch unzuverlässig.
+// -90 dBm Sehr schlecht Meistens Rauschen, das die meisten Funktionen behindert.
+//-100 dBm Am schlechtesten Nur Rauschen.
+
+20210218:
+Outdoor pressure on WEB page.
+Replaced WEB page title HOSTNAME with WEBSITE_TITLE in configuration (Thanks to GenosseFlosse).
 
 20200709:
 Turn off timer when it is running.
@@ -429,7 +509,7 @@ WEB API for Clock On/Off.
 Bugfixes.
 
 20200101:
-Outdoor Weather from OpenWeatherMap.
+Outdoor weather from OpenWeatherMap.
 New LED driver with LED array mapping.
 Reworked Configuration.h
 Switched to lean Arduino_Json.h
@@ -439,7 +519,7 @@ Some housekeeping.
 
 20190520:
 #define WIFI_BEEPS
-Fixed rare flickering of fade transition.
+Fixed rare flickering in fade transition.
 
 20190204:
 Maior update of "Readme.txt"

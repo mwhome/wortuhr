@@ -1,16 +1,18 @@
-//******************************************************************************
+//*****************************************************************************
 // Configuration.h
 // See README.txt for help
-//******************************************************************************
+//*****************************************************************************
 
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-//******************************************************************************
+//*****************************************************************************
 // Software settings
-//******************************************************************************
+//*****************************************************************************
 
-#define HOSTNAME "Nicoles WortUhr"
+#define HOSTNAME "Wortuhr"
+#define WEBSITE_TITLE "Wortuhr"
+//#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
 #define WIFI_SETUP_TIMEOUT 120
 #define WIFI_AP_PASS "12345678"
 #define OTA_PASS "1234"
@@ -19,12 +21,10 @@
 #define WIFI_BEEPS
 
 //#define NONE_TECHNICAL_ZERO
-#define AUTO_MODECHANGE_TIME 60
-#define FEED_SPEED 100
-#define EVENT_TIME 300
+#define AUTO_MODECHANGE_TIME 60 // seconds
+#define EVENT_TIME 300 // seconds
 #define ALARM_LED_COLOR RED
-#define ABUSE_CORNER_LED_FOR_ALARM
-//#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
+//#define ABUSE_CORNER_LED_FOR_ALARM
 
 //#define POWERON_SELFTEST
 #define SHOW_MODE_AMPM
@@ -32,10 +32,11 @@
 #define SHOW_MODE_WEEKDAY
 #define SHOW_MODE_DATE
 #define SHOW_MODE_MOONPHASE
+#define SHOW_MODE_SUNRISE_SUNSET // works only if APIKEY is defined
 #define SHOW_MODE_TEST
 
 #define APIKEY "10adf459bbfc2d2fb67033864f23f683"
-#define LOCATION "Offenburg, DE"
+#define LOCATION "Achern, DE"
 //#define LOCATION "Zurich, CH"
 //#define LOCATION "Hong Kong, HK"
 
@@ -57,9 +58,9 @@
 //#define FRONTCOVER_NL
 //#define FRONTCOVER_BINARY
 
-//******************************************************************************
+//*****************************************************************************
 // Timezone
-//******************************************************************************
+//*****************************************************************************
 
 //#define TIMEZONE_IDLW  // IDLW  International Date Line West UTC-12
 //#define TIMEZONE_SST   // SST   Samoa Standard Time UTC-11
@@ -93,34 +94,35 @@
 //#define TIMEZONE_SBT   // SBT   Solomon Islands Time UTC+11
 //#define TIMEZONE_NZST  // NZST  New Zealand Standard Time UTC+12
 
-//******************************************************************************
+//*****************************************************************************
 // Hardware settings
-//******************************************************************************
+//*****************************************************************************
 
 #define SERIAL_SPEED 115200
+
+#define NUMPIXELS 114
 
 //#define ONOFF_BUTTON
 //#define MODE_BUTTON
 //#define TIME_BUTTON
 
-#define NUMPIXELS 114
 //#define ESP_LED
 
 #define MIN_BRIGHTNESS 10
 #define MAX_BRIGHTNESS 255
-#define TEST_BRIGHTNESS 80
+#define TEST_BRIGHTNESS 150
 
 //#define SENSOR_DHT22
 #define DHT_TEMPERATURE_OFFSET 0.5
 #define DHT_HUMIDITY_OFFSET -2.0
 
 //#define RTC_BACKUP
-#define RTC_TEMPERATURE_OFFSET  -19.6
+#define RTC_TEMPERATURE_OFFSET -1.15
 
 #define LDR
 //#define LDR_IS_INVERSE
 
-#define BUZZER
+//#define BUZZER
 #define BUZZTIME_ALARM_1 30
 #define BUZZTIME_ALARM_2 30
 #define BUZZTIME_TIMER 30
@@ -142,18 +144,21 @@
 //#define LED_LAYOUT_HORIZONTAL_3
 //#define LED_LAYOUT_VERTICAL_1
 //#define LED_LAYOUT_VERTICAL_2
+//#define LED_LAYOUT_VERTICAL_3
+
+#define NEOPIXEL_RGB
+//#define NEOPIXEL_RGBW
 
 #define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
 //#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
+//#define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
 
-//******************************************************************************
+//*****************************************************************************
 // Misc
-//******************************************************************************
-
-
+//*****************************************************************************
 
 #define DEBUG
-#define DEBUG_WEB
+//#define DEBUG_WEB
 //#define DEBUG_IR
 //#define DEBUG_MATRIX
 //#define DEBUG_FPS
@@ -161,19 +166,19 @@
 //#define SYSLOGSERVER_SERVER "192.168.0.1"
 //#define SYSLOGSERVER_PORT 514
 
-//#define UPDATE_INFOSERVER "tmw-it.ch"
-//#define UPDATE_INFOFILE "/qlockwork/updateinfo.json"
+#define UPDATE_INFOSERVER "thorsten-wahl.ch"
+#define UPDATE_INFOFILE "/qlockwork/updateinfo.json"
 
 // ESP8266
-#define PIN_IR_RECEIVER  16 // D0 
+#define PIN_IR_RECEIVER  16 // D0 (no interrupt)
 #define PIN_WIRE_SCL     05 // D1 SCL
-#define PIN_WIRE_SDA     04 // D2 SDA 04
+#define PIN_WIRE_SDA     04 // D2 SDA
 #define PIN_MODE_BUTTON  00 // D3 LOW_Flash
 #define PIN_LED          02 // D4 ESP8266_LED
 #define PIN_BUZZER       14 // D5
 #define PIN_DHT22        12 // D6
 #define PIN_LEDS_CLOCK   13 // D7
-#define PIN_LEDS_DATA    15 // D8 15
+#define PIN_LEDS_DATA    15 // D8
 #define PIN_LDR          A0 // ADC
 #define PIN_TIME_BUTTON  01 // TXD0
 #define PIN_ONOFF_BUTTON 03 // RXD0

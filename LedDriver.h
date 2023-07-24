@@ -1,6 +1,6 @@
-//******************************************************************************
+//*****************************************************************************
 // LedDriver.h
-//******************************************************************************
+//*****************************************************************************
 
 #ifndef LEDDRIVER_H
 #define LEDDRIVER_H
@@ -9,8 +9,7 @@
 #include "Configuration.h"
 #include "Colors.h"
 
-class LedDriver
-{
+class LedDriver {
 public:
     LedDriver();
     ~LedDriver();
@@ -21,7 +20,7 @@ public:
     void setPixel(uint8_t num, uint8_t color, uint8_t brightness);
 
 private:
-    Adafruit_NeoPixel *strip;
+    Adafruit_NeoPixel* strip;
 
 };
 

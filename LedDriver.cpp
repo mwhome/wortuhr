@@ -1,36 +1,30 @@
-//******************************************************************************
+//*****************************************************************************
 // LedDriver.cpp
-//******************************************************************************
+//*****************************************************************************
 
 #include "LedDriver.h"
 
-LedDriver::LedDriver()
-{
+LedDriver::LedDriver() {
     strip = new Adafruit_NeoPixel(NUMPIXELS, PIN_LEDS_DATA, NEOPIXEL_TYPE);
     strip->begin();
 }
 
-LedDriver::~LedDriver()
-{
+LedDriver::~LedDriver() {
 }
 
-void LedDriver::clear()
-{
+void LedDriver::clear() {
     strip->clear();
 }
 
-void LedDriver::show()
-{
+void LedDriver::show() {
     strip->show();
 }
 
-void LedDriver::setPixel(uint8_t x, uint8_t y, uint8_t color, uint8_t brightness)
-{
+void LedDriver::setPixel(uint8_t x, uint8_t y, uint8_t color, uint8_t brightness) {
     setPixel(x + y * 11, color, brightness);
 }
 
-void LedDriver::setPixel(uint8_t num, uint8_t color, uint8_t brightness)
-{
+void LedDriver::setPixel(uint8_t num, uint8_t color, uint8_t brightness) {
 #ifdef LED_LAYOUT_HORIZONTAL_1
     uint8_t ledMap[] = {
           0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,
@@ -47,6 +41,7 @@ void LedDriver::setPixel(uint8_t num, uint8_t color, uint8_t brightness)
     };
 #endif
 
+
 #ifdef LED_LAYOUT_HORIZONTAL_2
     uint8_t ledMap[] = {
          103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 
@@ -62,6 +57,7 @@ void LedDriver::setPixel(uint8_t num, uint8_t color, uint8_t brightness)
          0, 1, 2, 3, 
     };
 #endif
+
 
 #ifdef LED_LAYOUT_HORIZONTAL_3
     uint8_t ledMap[] = {
@@ -111,9 +107,38 @@ void LedDriver::setPixel(uint8_t num, uint8_t color, uint8_t brightness)
     };
 #endif
 
-    uint8_t red   = brightness * 0.0039 * defaultColors[color].red;
-    uint8_t green = brightness * 0.0039 * defaultColors[color].green;
-    uint8_t blue  = brightness * 0.0039 * defaultColors[color].blue;
+#ifdef LED_LAYOUT_VERTICAL_3
+    uint8_t ledMap[] = {
+          9,  10,  29,  30,  49,  50,  69,  70,  89,  90, 109,
+          8,  11,  28,  31,  48,  51,  68,  71,  88,  91, 108,
+          7,  12,  27,  32,  47,  52,  67,  72,  87,  92, 107,
+          6,  13,  26,  33,  46,  53,  66,  73,  86,  93, 106,
+          5,  14,  25,  34,  45,  54,  65,  74,  85,  94, 105,
+          4,  15,  24,  35,  44,  55,  64,  75,  84,  95, 104,
+          3,  16,  23,  36,  43,  56,  63,  76,  83,  96, 103,
+          2,  17,  22,  37,  42,  57,  62,  77,  82,  97, 102,
+          1,  18,  21,  38,  41,  58,  61,  78,  81,  98, 101,
+          0,  19,  20,  39,  40,  59,  60,  79,  80,  99, 100,
+        111, 110, 113, 112, 114
+    };
+#endif
 
+    uint8_t red = brightness * 0.0039 * defaultColors[color].red;
+    uint8_t green = brightness * 0.0039 * defaultColors[color].green;
+    uint8_t blue = brightness * 0.0039 * defaultColors[color].blue;
+
+
+#ifdef NEOPIXEL_RGBW
+    uint8_t white = 0xFF;
+    if (red < white) white = red;
+    if (green < white) white = green;
+    if (blue < white) white = blue;
+    strip->setPixelColor(ledMap[num], red - white, green - white, blue - white, white);
+#endif
+
+#ifdef NEOPIXEL_RGB
     strip->setPixelColor(ledMap[num], red, green, blue);
+#endif
+
+    return;
 }

@@ -1,7 +1,3 @@
-#include <WiFiServer.h>
-#include <WiFiClient.h>
-//#include <WiFi.h>
-
 //******************************************************************************
 // Ntp.h - Get UTC time from NTP
 //******************************************************************************
@@ -13,9 +9,7 @@
 #include <TimeLib.h>
 #include <WiFiUdp.h>
 
-
-class Ntp
-{
+class Ntp {
 public:
     Ntp();
     ~Ntp();
