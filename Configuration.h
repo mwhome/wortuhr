@@ -10,8 +10,8 @@
 // Software settings
 //*****************************************************************************
 
-#define PRODUCT_NAME "Wortwecker"
-#define WEBSITE_TITLE "Wortwecker"
+#define PRODUCT_NAME "Wortuhr"
+#define WEBSITE_TITLE "Wortuhr"
 //#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
 #define WIFI_SETUP_TIMEOUT 30
 #define WIFI_CONNECT_TIMEOUT 15000
@@ -37,7 +37,7 @@
 //#define SHOW_MODE_TEST
 #define SHOW_MODE_SETTINGS
 
-#define APIKEY 017fb9a5fa2a9ddcbdbaa0e08ce27c6e
+#define APIKEY 
 #define DEFAULT_LOCATION "Achern, DE"
 
 //--------------
@@ -106,14 +106,14 @@
 //#define SENSOR_DHT22
 //#define SENSOR_MCP9808
 //#define SENSOR_BME280
-#define RTC_BACKUP
+//#define RTC_BACKUP
 #define LDR
-#define BUZZER
+//#define BUZZER
 //#define IR_RECEIVER
 
-#define ONOFF_BUTTON
-#define MODE_BUTTON
-#define TIME_BUTTON
+//#define ONOFF_BUTTON
+//#define MODE_BUTTON
+//#define TIME_BUTTON
 //#define PLUS_BUTTON
 //#define MINUS_BUTTON
 
@@ -133,8 +133,8 @@
 // GPIO 06 to GPIO 11 are
 // used for flash memory databus
 
-#define LED_LAYOUT_HORIZONTAL_1
-//#define LED_LAYOUT_HORIZONTAL_2
+//#define LED_LAYOUT_HORIZONTAL_1
+#define LED_LAYOUT_HORIZONTAL_2
 //#define LED_LAYOUT_HORIZONTAL_3
 //#define LED_LAYOUT_VERTICAL_1
 //#define LED_LAYOUT_VERTICAL_2
