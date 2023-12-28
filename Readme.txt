@@ -3,7 +3,8 @@ QLOCKWORK
 An advanced firmware for a DIY "word-clock".
 ******************************************************************************
 
-Qlockwork is an ESP8266 (NodeMCU or WeMos D1 mini) firmware (under GPL license) for a so called "word-clock".
+Qlockwork is an ESP8266 (NodeMCU or WeMos D1 mini) firmware (under GPL license) for a so called "word-clock",
+initially implemented by ch570512 (thanks Thorsten) and evolved by bracci.
 
 The clock adjusts the time and date once every hour via NTP with a time server on the Internet.
 If an RTC is installed, the time of the ESP is also set from the RTC via the SyncProvider.
@@ -13,7 +14,7 @@ The sequence of the colors should be: red, green, blue and white. If not, your L
 The clock also shows the local IP address it received via DHCP.
 Use this address in a browser to access the clocks web site to set it up.
 
-WiFi manager: If the clock can not connect to any WLAN at startup, it turns on an access point.
+WiFi manager: If the clock can not connect to any WLAN at startup, it turns on an access point(AP).
 Connect a mobile phone or tablet to the AP and enter the WLAN credentials. A white "WiFi" is shown on the clock.
 On success there are three short beeps and "WiFi" will be green.
 If no WLAN is connected or the timeout has expired, there is a long beep and "WiFi" turns red.
@@ -21,62 +22,80 @@ After the WLAN timeout the clock works without NTP but you can still control it 
 Without WLAN the clock uses the optional RTC to set the time or if no RTC is present has to be set manually.
 In either ways the clocks IP is shown as a textfeed.
 
-Events can be shown every five minutes on a particular day of the year as a textfeed.
-You can set them in "Events.h". Expand the array with events as shown in the default values.
-You can set a color for every event. Do not change the first entry.
-There is no comma behind the last entry.
+WPS: First press the WPS button on your WLAN router, then press the mode button on the QlockWiFive for more than 
+5 seconds. While keeping the menu button pressed, don't get confused about the mode first increments (e.g. seconds),
+then after 2s jumps to settings and only after 5 seconds "WPS" is shown in blue color on the clock display. Release
+the button and wait. On success "WPS" will turn green. At failure it turns red.
+
+Events can be shown at a certain repetition rate (every 5/15/30/60 minutes) on a particular day of the year as an 
+animation (e.g. a firework) followed by a textfeed. Up to 8 events can be configured through the web interface. 
+Go to settings (gear icon) -> events (birthday cake icon). You can set a text and color as well as an animation
+and the desired repetition rate for every event.
+
+Up to 30 animation files (examples in folder /data) can be stored on the file system to be selected and
+played on events. Code snippets and files used from manfred-hofmann (thanks Manfred).
 
 Updates of the firmware could be uploaded via USB, OTA or the clocks webserver.
 You will find more help and information on how to configure and compile the firmware in "Readme.md" in the zip-archive.
 You will also find a circuit diagram, a partslist and some pictures in the "/misc" directory.
 All sensors, the RTC and the buzzer are optional.
-The clock will run with the ESP8266 module only. No PCB needed.
+The clock can run even with an ESP8266 module only.
 
 Warning:    Do not power up the clock from USB only.
             This would blow up the ESP or even the USB port because of high power demand of the LED stripe.
-            Always use an external 5V powersupply with at least 4A.
+            Always use an external 5V powersupply with at least 3A.
 
 Disclaimer: Qlockwork uses lots of third party libraries.
-            I can not guarantee the integrity of these libraries.
+            We can not guarantee the integrity of these libraries.
             You use the Qlockwork firmware at your own risk.
 
-You can find the QLOCKWORK web-site here:
+You can find some more information about QLOCKWORK here:
 http://thorsten-wahl.ch/qlockwork/
 
 You can download the latest version of the firmware here:
-https://github.com/ch570512/Qlockwork
+https://github.com/bracci/Qlockwork
+
+Shop Hardware here:
+https://shop.bracci.ch/
 
 Visit this forum for comments, suggestions and bug reports:
-http://diskussion.christians-bastel-laden.de/viewtopic.php?f=23&t=2843
+http://diskussion.christians-bastel-laden.de/viewtopic.php?t=4230 (QlockWiFive)
+http://diskussion.christians-bastel-laden.de/viewtopic.php?f=23&t=2843 (Qlockwork)
 
 ******************************************************************************
 Top features:
 ******************************************************************************
 
 Almost no electronics needed. Only an ESP8266 and an LED-stripe.
-Optional support for LDR, Buzzer, temperature and humidity sensor, IR-remote and buttons.
+Optional support for LDR/photo transistor, buzzer, temperature and humidity sensor, IR sensor/remote and buttons.
 Support for NeoPixel (RGB and RGBW) LED-stripes.
-Support for various horizontal and vertical LED layouts. 3 layouts included.
+Support for various horizontal and vertical LED layouts. 5 layouts included.
 Webpage to control and configure the clock via WiFi.
-Adaptive brightness control when using an LDR.
+WPS functionality for a quick and easy WiFi setup.
+Settings via on-screen menu using tactile buttons or IR-remote to control.
+Adaptive brightness control when using an LDR or photo transistor.
 3 transitions for timechange.
-Indoor temperature from RTC or temperature and humidity from DHT sensor.
+Indoor temperature from RTC, MCP9808 or BME280 or temperature and humidity from DHT or BME280 sensor.
 Outdoor temperature and humidity from OpenWeather. You need an APIKey from OpenWeather to use this feature.
 Visualisation of moonphase.
 Show sunrise and sunset times with animation.
-Textfeed for events and infos, local and over the web.
-Support for 16 frontcovers (Original and DIY) in 6 languages.
-25 Colors.
+Textfeed and animations for 8 custom events and infos.
+Upload up to 30 animation files, usable for events.
+Support for 16 frontcovers (original and DIY) in 6 languages.
+25 colors.
+3 color change modes (incl. mood light -> continuous color change)
 99 minute timer.
 2 Alarms with weekday selection.
 NTP timesync with timezone support.
 Automatic adjustment of daylight saving time.
-USB and Over-the-air firmware updates.
+USB and over-the-air firmware updates.
+Admin settings page to configure time server, OpenWeather API key & location and the front cover.
 
 ******************************************************************************
 Pages:
 ******************************************************************************
 
+Modes:
 Time
 AM/PM
 Seconds
@@ -96,24 +115,39 @@ Green
 Blue
 White
 
+Settings:
+Auto brightness control
+Color
+Color change
+Transition
+IT IS
+Time
+Year
+Month
+Day
+Daily switch off time
+Daily switch on time
+Fallback timeout back to time
+
 ******************************************************************************
 Needed libraries: (recommended/tested versions in brackets)
 ******************************************************************************
 
-Arduino IDE for Windows (1.8.19)
-esp8266 by ESP8266 Community (3.0.2)
+Arduino IDE for Windows (1.8.57)
+esp8266 by ESP8266 Community (3.1.2)
 Arduino_JSON by Arduino (0.1.0)
-Adafruit NeoPixel by Adafruit (1.10.4)
-Adafruit Unified Sensor by Adafruit (1.1.5)
+Adafruit NeoPixel by Adafruit (1.11.0)
+Adafruit Unified Sensor by Adafruit (1.1.9)
+Adafruit MCP9808 by Adafruit (2.0.0)
+Adafruit BME280 by Adafruit (2.4.1)
 ArduinoHttpClient by Arduino (0.4.0)
 ArduinoOTA by Juraj Andressy (1.0.7)
 DHT sensor library by Adafruit (1.4.3)
 DS3232RTC by Jack Christensen (2.0.0)
-IRremoteESP8266 by Sebastien Warin (2.8.1)
-Time by Michael Margolis (1.6.1)
-
-Included in source is the Timezone library from Jack Christensen
-and WiFiManager by AlexT.
+IRremoteESP8266 by Sebastien Warin (2.8.4)
+Time by Paul Stoffregen (1.6.1)
+WiFiManager by tablatronix/tzapu (0.16.0)
+Timezone by Jack Christensen (1.2.4)
 
 ******************************************************************************
 Compiler-Options: (recommended/tested)
@@ -140,6 +174,11 @@ Don't forget to install Python 2.7 and to select "Add python.exe to path" while 
 
 Call "http://your_clocks_ip/update" to upload a new firmware via webbrowser.
 Call "http://your_clocks_ip/reset" to restart the ESP.
+Call "http://your_clocks_ip/wifiReset" to forget all WiFi networks and credentials.
+Call "http://your_clocks_ip/settingsReset" to forget all settings.
+Call "http://your_clocks_ip/factoryReset" to forget all settings, WiFi networks and credentials.
+Call "http://your_clocks_ip/admin" to open the admin settings page.
+Call "http://your_clocks_ip/fs" to open the file system on the ESP and upload animation files, e.g. stored in the repository in the folder "web".
 
 ******************************************************************************
 Operation manual:
@@ -147,8 +186,10 @@ Operation manual:
 
 Press "on/off" to switch the LEDs on and off.
 Press "Settings" to configure the clock via web-site.
-Press "Mode" to jump to the next page.
+Press "Mode" to jump to the next page. Long press enters settings menu. (if enabled by SHOW_MODE_SETTINGS)
 Press "Time" to always jump back to the time page.
+Press "Plus" to increase LED brightness or to increment value/switch options in settings menu.
+Press "Minus" to decrease LED brightness or to decrement value/switch options in settings menu.
 
 *** Modes: *******************************************************************
 
@@ -160,8 +201,8 @@ Date:                               Shows day and month.
 Sunrise:                            Time of sunrise.
 Sunset:                             Time of sunset.
 Moonphase:                          Shows the moonphase.
-Room temperature:                   Display of the measured temperature in the room (only with RTC or DHT22).
-Room humidity:                      Display of the measured humidity in the room (only with DHT22).
+Room temperature:                   Display of the measured temperature in the room (only with RTC, MCP9808, BME280 or DHT22).
+Room humidity:                      Display of the measured humidity in the room (only with BME280 or DHT22).
 Outdoor temperature:                Display the temperature for your location from OpenWeather.
 Outdoor humidity:                   Display the humidity for your location from OpenWeather.
 Timer:                              Display of the remaining time if a timer is set.
@@ -171,7 +212,25 @@ Green:                              Set all LEDs to green.
 Blue:                               Set all LEDs to blue.
 White:                              Set all LEDs to white.
 
-*** Settings: ****************************************************************
+*** Settings (on-screen): ***************************************************
+
+Auto brightness control (AB):		Enable (EN) or disable (DA) adaptive brightness control.
+                                    Brightness will adjust itself in the range of MIN_BRIGHTNESS and brightness.
+Color (CO):							Choose one of 25 colors (0~25) for the LEDs.
+Color change (CC):					Change the color in intervals.
+                                    Do not change (NO), every 5 minutes (5), every hour (60), every day (24), continuously (MD).
+Transition (TR):					Choose between none (NO), matrix (MX), move up (UP) or fade (FD) mode transition.
+Purist Mode (PT):					Enable (EN) or disable (DA) purist mode. It will be shown every half and full hour anyway.
+Show "GSI" (GS):					Enable (EN) or disable (DA) the term GSI for swiss german.
+Time (TI ME):						Set the current time in case no internet connectivity is available. The seconds are set to zero.
+Year (YY):							Set the current year in case no internet connectivity is available.
+Month (MM):							Set the current month in case no internet connectivity is available.
+Day (DD):							Set the current day in case no internet connectivity is available.
+Daily switch off time (DO FF):		Set the time at which the clock switches off automatically (e.g. at the evening).
+Daily switch on time (D ON):		Set the time at which the clock switches on automatically (e.g. at the morning).
+Fallback timeout (FB):				Time in seconds to change mode back to time. (0: disabled, max. 60s)
+
+*** Settings (web): **********************************************************
 
 Alarm 1:                            Enable (on) or disable (off) alarm 1.
                                     Time for alarm 1.
@@ -182,25 +241,35 @@ Alarm 2:                            Enable (on) or disable (off) alarm 2.
 Hourly beep:                        Short beep every full hour.
 Timer:                              Sets the minute timer. Set to zero to disable a running timer.
 Show temperature:                   Enable (on) or disable (off) showing the temperature in time view.
-ABC:                                Enable (on) or disable (off) adaptive brightness control.
+Auto brightness control:      		Enable (on) or disable (off) adaptive brightness control.
                                     Brightness will adjust itself in the range of MIN_BRIGHTNESS and brightness.
 Brightness:                         Brightness of the LEDs in percent. The range is MIN_BRIGHTNESS to MAX_BRIGHTNESS.
                                     If ABC is enabled this is the maximum achievable brightness.
 Color:                              Choose one of 25 colors for the LEDs.
 Colorchange:                        Change the color in intervals.
-                                    Do not change (off), every 5 minutes (five), every hour (hour), every day (day).
+                                    Do not change (off), every 5 minutes (five), every hour (hour), every day (day), continuously (mood).
 Transition:                         Choose between fast, move or fade mode transition.
-Timeout:                            Time in seconds to change mode back to time. (0: disabled)
-Night off:                          Set the time the clocks turns itself off at night.
-Day on:                             Set the time the clocks turns itself on at day.
-Show "It is":                       Enable (on) or disable (off) "It is". It will be shown every half and full hour anyway.
+Fallback timeout:           		Time in seconds to change mode back to time. (0: disabled, max. 60s)
+Daily switch off time:              Set the time the clock turns itself off at night.
+Daily switch on time:               Set the time the clock turns itself on at day.
+Purist Mode:                       	Enable (on) or disable (off) purist mode. It will be shown every half and full hour anyway.
+Show "GSI":							Enable (on) or disable (off) the term GSI for swiss german.
 Set date/time:                      Date and time of the clock. The seconds are set to zero if you press save.
+
+*** Admin Settings (web): ****************************************************
+Time server:						URL of the preferred time server
+OpenWeather API key:				API key provided by Openweather allowing to get weather information through API.
+OpenWeather location				Location which the weather information should refer to. Needs to follow the location format of 
+									OpenWeather, e.g. "Bern, CH". Check out on https://openweathermap.org/ and check for your city.
+Language/dialect:					Language or dialect of the used front cover.
+Light sensor column no.				Column number in which the light sensor is installed.			
+Light sensor row no.				Row number in which the light sensor is installed.
 
 ******************************************************************************
 Configuration.h - Software settings:
 ******************************************************************************
 
-#define HOSTNAME                    The name of the clock.
+#define PRODUCT_NAME                The name of the clock.
 #define WEBSITE_TITLE               Title on top of the clocks webpage.
 #define WIFI_SETUP_TIMEOUT          Time in seconds set up the WiFiManager or search for a WLAN.
                                     If no WLAN is connected the clock enters AP mode.
@@ -216,7 +285,6 @@ Configuration.h - Software settings:
 #define AUTO_MODECHANGE_TIME        Time in seconds to wait between switching from time to temperature.
 #define FEED_SPEED                  Feed delay in milliseconds. 120 is a good start.
 #define SUNSET_SUNRISE_SPEED        Milliseconds delay between sunrise screen -> sunrise time and sunset screen -> sunset time
-#define EVENT_TIME                  Time in seconds to wait between showing events. Comment to turn off events.
 #define ALARM_LED_COLOR             Color of the alarm LED. If not defined the display color will be used.
                                     The possible colors are:
                                     WHITE, RED, RED_25, RED_50, ORANGE, YELLOW, YELLOW_25, YELLOW_50, GREENYELLOW,
@@ -234,13 +302,14 @@ Configuration.h - Software settings:
 #define SHOW_MODE_MOONPHASE         Show moonphase.
 #define SHOW_MODE_SUNRISE_SUNSET    Show sunrise and sunset times.
 #define SHOW_MODE_TEST              Show tests.
+#define SHOW_MODE_SETTINGS	        Show on-display settings menu.
 
-#define APIKEY                      Your OpenWeather API key.
-#define LOCATION                    Your location for OpenWeather.
+#define APIKEY                      Enables OpenWeather features.
+#define DEFAULT_LOCATION            Default location for OpenWeather.
 
 #define TIMEZONE_*                  The time zone in which the clock is located. Important for the UTC offset and the
                                     summer/winter time change.
-#define FRONTCOVER_*                Frontcover of the clock. This also sets the language of the menu and the website.
+#define LANGUAGE_*					Language of the web interface.
 
 ******************************************************************************
 Configuration.h - Hardware settings:
@@ -250,11 +319,20 @@ Configuration.h - Hardware settings:
 
 #define ONOFF_BUTTON                Use a hardware on/off-button.
 #define MODE_BUTTON                 Use a hardware mode-button.
-#define TIME_BUTTON                 Use a hardware time-button. Debug to serial will not work if defined.
+#define TIME_BUTTON                 Use a hardware time-button.
+#define PLUS_BUTTON					Use a hardware plus-button.
+#define MINUS_BUTTON				Use a hardware minus-button.
 
 #define SENSOR_DHT22                Use a DHT22 sensor module (not the plain sensor) for room temperature and humidity.
 #define DHT_TEMPERATURE_OFFSET      Sets how many degrees the measured room temperature (+ or -) should be corrected.
 #define DHT_HUMIDITY_OFFSET         Sets how many degrees the measured room humidity (+ or -) should be corrected.
+
+#define SENSOR_MCP9808				Use a MCP9808 sensor or sensor module.
+#define MCP_TEMPERATURE_OFFSET		Sets how many degrees the measured room temperature (+ or -) should be corrected.
+
+#define SENSOR_BME					Use a BME280 sensor or sensor module.
+#define BME_TEMPERATURE_OFFSET		Sets how many degrees the measured room temperature (+ or -) should be corrected.
+#define BME_HUMIDITY_OFFSET         Sets how many degrees the measured room humidity (+ or -) should be corrected.
 
 #define RTC_BACKUP                  Use an RTC as backup and room temperature.
 #define RTC_TEMPERATURE_OFFSET      Sets how many degrees the measured room temperature (+ or -) should be corrected.
@@ -348,6 +426,22 @@ Configuration.h - Hardware settings:
    000 019 020 039 040 059 060 079 080 099 100
 112                                           113
 
+#define LED_LAYOUT_VERTICAL_4       Vertical and corner and alarm LEDs at the end of the strip. (As seen from the front.)
+#define LED_LAYOUT_VERTICAL_4_XXL	Indentically with LED_LAYOUT_VERTICAL_4 but with 2 LEDs per letter.
+
+011                    114                    113
+   010 012 031 032 051 052 071 072 091 092 112
+   009 013 030 033 050 053 070 073 090 093 111
+   008 014 029 034 049 054 069 074 089 094 110
+   007 015 028 035 048 055 068 075 088 095 109
+   006 016 027 036 047 056 067 076 087 096 108
+   005 017 026 037 046 057 066 077 086 097 107
+   004 018 025 038 045 058 065 078 085 098 106
+   003 019 024 039 044 059 064 079 084 099 105
+   002 020 023 040 043 060 063 080 083 100 104
+   001 021 022 041 042 061 062 081 082 101 103
+000                                           102
+
 ******************************************************************************
 Configuration.h - Misc:
 ******************************************************************************
@@ -367,23 +461,6 @@ Configuration.h - Misc:
 #define UPDATE_INFOFILE             Path and name of the updateinfo file.
 
 #define SERIAL_SPEED                Serial port speed for the console.
-
-******************************************************************************
-Events.h
-******************************************************************************
-
-event_t events[]                    Display a textfeed on a particular day of the year.
-                                    The format of an entry in the array is:
-                                    { month, day, "Text to display.", year, color },
-                                    The last entry has no comma at the end.
-                                    Year will be used to calculate an age. "present year" - year = age.
-                                    '0' will not show an age.
-                                    There can only be one event a day.
-                                    The possible colors are:
-                                    WHITE, RED, RED_25, RED_50, ORANGE, YELLOW, YELLOW_25, YELLOW_50, GREENYELLOW,
-                                    GREEN, GREEN_25, GREEN_50, MINTGREEN, CYAN, CYAN_25, CYAN_50, LIGHTBLUE, BLUE,
-                                    BLUE_25, BLUE_50, VIOLET, MAGENTA, MAGENTA_25, MAGENTA_50, PINK.
-                                    Do not change the first entry.
 
 ******************************************************************************
 Web-API:
@@ -419,15 +496,28 @@ tr=1                                Number of transition. See Modes.h
 to=15                               Timeout in seconds
 no=hh:mm                            Night off hour [hh] and minute [mm]
 do=hh:mm                            Day on hour [hh] and minute [mm]
-ii=1                                "It is" on [1] or off [0]
+ii=1                                Purist mode on [1] or off [0]
+gs=0								Enable [1] or disable [0] the term GSI for swiss german
 st=YYYY-MM-DDThh:mm                 Set time and date
 
-http://your_clocks_ip/setEvent?
-day=dd                              Set day of event
-month=mm                            Set month of event
-color=0                             Color of the eventtext, 0 to 24 (optional)
-text=text                           Set text of event, max. 40 characters
-                                    e.g.: http://192.168.1.10/setEvent?day=27&month=10&color=5&text=This%20is%20an%20event.
+http://your_clocks_ip/commitEvents?
+ev0t=Happy+Birthday					Feed text (max. 30 characters) for event no.0
+ev0ani=0							Animation name [0~29] for event no.0
+ev0d=YYYY-MM-DD						Date for event no.0
+ev0c=0								Color [0~24] for event no.0
+ev0rep=4							Repetition rate [0~4] for event no.0
+...
+ev0t=Happy+Birthday					Feed text (max. 30 characters) for event no.7
+ev0ani=0							Animation name [0~29] for event no.7
+ev0d=YYYY-MM-DD						Date for event no.7
+ev0c=0								Color [0~24] for event no.7
+ev7rep=4							Repetition rate [0~4] for event no.7
+
+http://your_clocks_ip/commitAdminSettings?
+adts=pool.ntp.org                   URL of preferred time server
+adwk=123...                         API key used for OpenWeather
+adwl=bern, ch						Openweather location
+adfc=0								Front cover [0~13]
 
 http://your_clocks_ip/showText?
 buzzer=1                            Number of times the buzzer will beep before showing the text (optional)
@@ -443,7 +533,57 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20231219:
+Introduced settingsReset and factoryReset. 
 
+20231218:
+Introduced settings for LDR position.
+Fixed bug in dialect "Swiss German GR".
+Added missing conditions and added web debug content for BME280.
+
+20231124:
+Introduced dialect of Sardinia.
+
+20231026:
+Introduced BME280 sensor to measure and display temperature and humidity.
+
+20231024:
+New swiss german dialect: Aargau (AG) & Graubuenden (GR). Available in the admin area.
+Force WiFi not to go to any sleep mode.
+
+20230620:
+New swiss german dialect: Zurich (ZH). Available in the admin area.
+
+20230604:
+Fixed bug: color range of random color change.
+
+20230531:
+Optimized configuration. Little bug fixing.
+
+20230530:
+Watchdog optimization.
+
+20230526:
+Improoved stability and robustness against watchdog attacks. Some cosmetics to the web interface.
+
+20230521:
+GSI optional for swiss german. Renamed "IT IS" to purist mpde.
+
+20230518:
+Optimized and stabilized WiFi connectivity. WPS functionality. Brightness setting visualization.
+
+20230514:
+Admin settings accesible by calling "http://your_clocks_ip/admin". Here you can find settings which should not change open or
+even never throughout the lifetime of the clock.
+
+20230502:
+Introduced on-screen settings menu, plus/minus buttons, file storage and events 
+using animations (thanks Manfred), enhanced IR control (especially for QlockWiFive IR control), 
+transition demo (IR), matrix transition, mood color mode, MCP9808 temperature sensor, bug fixing.  
+
+<---bracci
+
+--->ch570512
 20220830:
 Fixed the issue that adaptive brightness control (ABC) can not be disabled in settings.
 

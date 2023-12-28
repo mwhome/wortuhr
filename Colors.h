@@ -11,7 +11,8 @@ enum eColorChange : uint8_t
 	COLORCHANGE_FIVE,                    // 1
 	COLORCHANGE_HOUR,                    // 2
 	COLORCHANGE_DAY,                     // 3
-	COLORCHANGE_COUNT = COLORCHANGE_DAY
+  COLORCHANGE_MOOD,                    // 4
+	COLORCHANGE_COUNT = COLORCHANGE_MOOD
 };
 
 enum eColor : uint8_t
@@ -41,7 +42,8 @@ enum eColor : uint8_t
 	MAGENTA_25,
 	MAGENTA_50,
 	PINK,
-	COLOR_COUNT = PINK
+	COLOR_COUNT = PINK,
+  MOOD
 };
 
 struct color_s
@@ -53,7 +55,7 @@ struct color_s
 
 const color_s defaultColors[] =
 {
-	{ 0xFF, 0xFF, 0xFF }, // 00 WHITE
+	{ 0xFF, 0xFF, 0xA0 }, // 00 WHITE
 
 	{ 0xFF, 0x00, 0x00 }, // 01 RED
 	{ 0xFF, 0x40, 0x40 }, // 02 RED_25
@@ -90,6 +92,18 @@ const color_s defaultColors[] =
 	{ 0xFF, 0x80, 0xFF }, // 23 MAGENTA_50
 
 	{ 0xFF, 0x00, 0x7F }  // 24 PINK
+};
+
+static uint8_t getRed(uint32_t color){
+  return (color >> 16);
+};
+
+static uint8_t getGreen(uint32_t color){
+  return (color >> 8);
+};
+
+static uint8_t getBlue(uint32_t color){
+  return (color);
 };
 
 #endif

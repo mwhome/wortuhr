@@ -36,6 +36,7 @@ time_t Ntp::getTime(char* server) {
             ntpTime -= 2208988800;
             return ntpTime;
         }
+        yield();
     }
     return 0;
 }

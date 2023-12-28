@@ -11,9 +11,18 @@
 #include "Configuration.h"
 #include "Languages.h"
 #include "Modes.h"
+#include "Event.h"
 
 #define SETTINGS_MAGIC_NUMBER 0x2A
-#define SETTINGS_VERSION 25
+#define SETTINGS_VERSION 0
+
+#define MOOD_LEVEL_MAX 9
+
+#define LEN_TS_URL 30
+#define LEN_OW_API_KEY 33
+#define LEN_OW_LOCATION 30
+
+#define NUM_EVTS 8
 
 class Settings {
 public:
@@ -30,7 +39,7 @@ public:
         uint8_t transition;
         uint8_t timeout;
         boolean modeChange;
-        boolean itIs;
+        boolean purist;
         boolean alarm1;
         time_t  alarm1Time;
         uint8_t alarm1Weekdays;
@@ -40,12 +49,21 @@ public:
         time_t  nightOffTime;
         time_t  dayOnTime;
         boolean hourBeep;
+        uint8_t moodRate;
+        event_t events[NUM_EVTS];
+        char timeServer[LEN_TS_URL];
+        char owApiKey[LEN_OW_API_KEY];
+        char owLocation[LEN_OW_LOCATION];
+        eFrontCover frontCover;
+        bool chGsi;
+        uint8_t ldrPosX;
+        uint8_t ldrPosY;
     } mySettings;
 
     void saveToEEPROM();
-
-private:
     void resetToDefault();
+    
+private:
     void loadFromEEPROM();
 };
 

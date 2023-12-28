@@ -22,7 +22,7 @@ void Settings::resetToDefault() {
     mySettings.transition = TRANSITION_FADE;
     mySettings.timeout = 10;
     mySettings.modeChange = false;
-    mySettings.itIs = true;
+    mySettings.purist = false;
     mySettings.alarm1 = false;
     mySettings.alarm1Time = 0;
     mySettings.alarm1Weekdays = 0b11111110;
@@ -32,13 +32,31 @@ void Settings::resetToDefault() {
     mySettings.nightOffTime = 3600;
     mySettings.dayOnTime = 18000;
     mySettings.hourBeep = false;
+    mySettings.moodRate = 0;
 
+    for (uint8_t i = 0; i < NUM_EVTS ; i++) {
+      mySettings.events[i].enabled = false;
+      memset(mySettings.events[i].txt, 0, sizeof(mySettings.events[i].txt));
+      memset(mySettings.events[i].animation, 0, sizeof(mySettings.events[i].animation));
+      mySettings.events[i].color = WHITE;
+      mySettings.events[i].repRate = EVT_REP_60;
+      mySettings.events[i].time = 0;
+    }
+
+    String(NTP_DEFAULT_SERVER).toCharArray(mySettings.timeServer, sizeof(mySettings.timeServer), 0);
+    memset(mySettings.owApiKey, 0, sizeof(mySettings.owApiKey));
+    String(DEFAULT_LOCATION).toCharArray(mySettings.owLocation, sizeof(mySettings.owLocation), 0);
+    mySettings.frontCover = FRONTCOVER_CH_BE;
+    mySettings.chGsi = true;
+    mySettings.ldrPosX = LDR_X_DEFAULT;
+    mySettings.ldrPosY = LDR_Y_DEFAULT;
+    
     saveToEEPROM();
 }
 
 // Load settings from EEPROM
 void Settings::loadFromEEPROM() {
-    EEPROM.begin(512);
+    EEPROM.begin(1024);
     EEPROM.get(0, mySettings);
     if ((mySettings.magicNumber != SETTINGS_MAGIC_NUMBER) || (mySettings.version != SETTINGS_VERSION))
         resetToDefault();
@@ -47,8 +65,8 @@ void Settings::loadFromEEPROM() {
 
 // Write settings to EEPROM
 void Settings::saveToEEPROM() {
-    Serial.println("Settings saved to EEPROM.");
-    EEPROM.begin(512);
+    Serial.println("Settings (" + String(sizeof(mySettings)) + "bytes) saved to EEPROM.");
+    EEPROM.begin(1024);
     EEPROM.put(0, mySettings);
     //EEPROM.commit();
     EEPROM.end();
