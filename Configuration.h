@@ -10,8 +10,8 @@
 // Software settings
 //*****************************************************************************
 
-#define PRODUCT_NAME "Wortuhr"
-#define WEBSITE_TITLE "Wortuhr"
+#define PRODUCT_NAME "Wortuhr Schule"
+#define WEBSITE_TITLE "Wortuhr Schule"
 //#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
 #define WIFI_SETUP_TIMEOUT 30
 #define WIFI_CONNECT_TIMEOUT 15000
@@ -38,7 +38,7 @@
 #define SHOW_MODE_SETTINGS
 
 #define APIKEY 
-#define DEFAULT_LOCATION "Achern, DE"
+#define DEFAULT_LOCATION "Renchen, DE"
 
 //--------------
 #define MOOD_INTERVAL_MIN 300
@@ -102,13 +102,13 @@
 //#define BOARD_QWF_V2_0
 
 #ifdef BOARD_DEFAULT
-#define ESP_LED
+//#define ESP_LED
 //#define SENSOR_DHT22
 //#define SENSOR_MCP9808
 //#define SENSOR_BME280
-//#define RTC_BACKUP
+#define RTC_BACKUP
 #define LDR
-//#define BUZZER
+#define BUZZER
 //#define IR_RECEIVER
 
 //#define ONOFF_BUTTON
@@ -134,8 +134,8 @@
 // used for flash memory databus
 
 //#define LED_LAYOUT_HORIZONTAL_1
-#define LED_LAYOUT_HORIZONTAL_2
-//#define LED_LAYOUT_HORIZONTAL_3
+//#define LED_LAYOUT_HORIZONTAL_2
+#define LED_LAYOUT_HORIZONTAL_3
 //#define LED_LAYOUT_VERTICAL_1
 //#define LED_LAYOUT_VERTICAL_2
 //#define LED_LAYOUT_VERTICAL_3
@@ -240,7 +240,7 @@
 #define PIXEL_NO_CORNER_4 PIXEL_NO_CORNER_3 + 1
 #define PIXEL_NO_ALARM PIXEL_NO_CORNER_4 + 1     
 
-#define MIN_BRIGHTNESS 20
+#define MIN_BRIGHTNESS 50
 #define MAX_BRIGHTNESS 255
 #define TEST_BRIGHTNESS 80
 
@@ -259,7 +259,7 @@
 #endif
 
 #ifdef RTC_BACKUP
-#define RTC_TEMPERATURE_OFFSET -9.0
+#define RTC_TEMPERATURE_OFFSET -16.5
 #endif
 
 #ifdef LDR
