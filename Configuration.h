@@ -10,11 +10,11 @@
 // Software settings
 //*****************************************************************************
 
-#define PRODUCT_NAME "Wortuhr Schule"
-#define WEBSITE_TITLE "Wortuhr Schule"
+#define PRODUCT_NAME "Wortuhr"
+#define WEBSITE_TITLE "Wortuhr"
 //#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
-#define WIFI_SETUP_TIMEOUT 30
-#define WIFI_CONNECT_TIMEOUT 15000
+#define WIFI_SETUP_TIMEOUT 50
+#define WIFI_CONNECT_TIMEOUT 30000
 #define BRIGHTNESS_TIMEOUT 1000
 #define WIFI_AP_PASS "12345678"
 #define OTA_PASS "1234"
@@ -34,11 +34,11 @@
 #define SHOW_MODE_DATE
 #define SHOW_MODE_MOONPHASE
 #define SHOW_MODE_SUNRISE_SUNSET // works only if APIKEY is defined
-//#define SHOW_MODE_TEST
+#define SHOW_MODE_TEST
 #define SHOW_MODE_SETTINGS
 
-#define APIKEY 
-#define DEFAULT_LOCATION "Renchen, DE"
+#define APIKEY
+#define DEFAULT_LOCATION  "Achern, DE"
 
 //--------------
 #define MOOD_INTERVAL_MIN 300
@@ -99,16 +99,17 @@
 
 #define BOARD_DEFAULT
 //#define BOARD_QWF_V1_2
+//#define BOARD_QWF_MINI_V1_1
 //#define BOARD_QWF_V2_0
 
 #ifdef BOARD_DEFAULT
-//#define ESP_LED
+#define ESP_LED
 //#define SENSOR_DHT22
 //#define SENSOR_MCP9808
 //#define SENSOR_BME280
-#define RTC_BACKUP
+//#define RTC_BACKUP
 #define LDR
-#define BUZZER
+//#define BUZZER
 //#define IR_RECEIVER
 
 //#define ONOFF_BUTTON
@@ -154,6 +155,7 @@
 #define ESP_LED
 #define RTC_BACKUP
 #define LDR
+//#define BUZZER
 #define IR_RECEIVER
 
 //#define ONOFF_BUTTON
@@ -164,13 +166,16 @@
 
 // Pin Definition ESP8266 (Wemos D1 mini)
 #define PIN_IR_RECEIVER  12 // D6 (no interrupt)
-//#define PIN_MODE_BUTTON  00 // D3 LOW_Flash
+#define PIN_MODE_BUTTON  16 // D0 
 #define PIN_LED          02 // D4 ESP8266_LED
+#define PIN_BUZZER       15 // D8
 #define PIN_LEDS_CLOCK   14 // D5
 #define PIN_LEDS_DATA    13 // D7
 #define PIN_LDR          A0 // ADC
 //#define PIN_TIME_BUTTON  01 // TXD0
 //#define PIN_ONOFF_BUTTON 03 // RXD0
+#define PIN_MINUS_BUTTON 01 // TXD0
+#define PIN_PLUS_BUTTON 03 // RXD0
 // GPIO 06 to GPIO 11 are
 // used for flash memory databus
 
@@ -184,10 +189,55 @@
 #define NEOPIXEL_RGB
 //#define NEOPIXEL_RGBW
 
+#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
+//#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
+//#define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
+#endif // BOARD_QWF_V1_2
+
+
+// QlockWiFive Board Mini v1.1
+#ifdef BOARD_QWF_MINI_V1_1
+#define ESP_LED
+#define RTC_BACKUP
+#define LDR
+#define IR_RECEIVER
+//#define BUZZER
+
+//#define ONOFF_BUTTON
+//#define MODE_BUTTON
+//#define TIME_BUTTON
+//#define PLUS_BUTTON
+//#define MINUS_BUTTON
+
+// Pin Definition ESP8266 (Wemos D1 mini)
+#define PIN_IR_RECEIVER  12 // D6 
+//#define PIN_MODE_BUTTON  02 // D4 LOW_Flash
+#define PIN_LED          02 // D4 ESP8266_LED
+#define PIN_LEDS_DATA    13 // D7
+#define PIN_LDR          A0 // ADC
+#define PIN_BUZZER       15 // D8
+//#define PIN_TIME_BUTTON  01 // TXD0
+//#define PIN_ONOFF_BUTTON 03 // RXD0
+//#define PIN_MINUS_BUTTON  16 // D0 (no interrupt)
+//#define PIN_PLUS_BUTTON 14 // D5
+// GPIO 06 to GPIO 11 are
+// used for flash memory databus
+
+//#define LED_LAYOUT_HORIZONTAL_1
+//#define LED_LAYOUT_VERTICAL_1
+//#define LED_LAYOUT_VERTICAL_2
+//#define LED_LAYOUT_VERTICAL_3
+//#define LED_LAYOUT_VERTICAL_4
+//#define LED_LAYOUT_VERTICAL_4_XXL
+#define LED_LAYOUT_VERTICAL_5
+
+#define NEOPIXEL_RGB
+//#define NEOPIXEL_RGBW
+
 //#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
 //#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
 #define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
-#endif // BOARD_QWF_V1_2
+#endif // BOARD_QWF_MINI_V1_1
 
 // QlockWiFive Board v2.0
 #ifdef BOARD_QWF_V2_0
@@ -206,7 +256,7 @@
 // Pin Definition ESP8266
 #define PIN_IR_RECEIVER  12
 #define PIN_MODE_BUTTON  02
-#define PIN_LEDS_DATA    15
+#define PIN_LEDS_DATA    13
 #define PIN_LDR          A0
 //#define PIN_TIME_BUTTON  14
 //#define PIN_ONOFF_BUTTON 00
@@ -240,7 +290,7 @@
 #define PIXEL_NO_CORNER_4 PIXEL_NO_CORNER_3 + 1
 #define PIXEL_NO_ALARM PIXEL_NO_CORNER_4 + 1     
 
-#define MIN_BRIGHTNESS 50
+#define MIN_BRIGHTNESS 20
 #define MAX_BRIGHTNESS 255
 #define TEST_BRIGHTNESS 80
 
@@ -259,7 +309,7 @@
 #endif
 
 #ifdef RTC_BACKUP
-#define RTC_TEMPERATURE_OFFSET -16.5
+#define RTC_TEMPERATURE_OFFSET -3.0
 #endif
 
 #ifdef LDR
@@ -267,8 +317,8 @@
 #define LDR_MIN_DEFAULT 99 // The ESP will crash if LDR_MIN_DEFAULT and LDR_MAX_DEFAULT are equal due to an error in map()
 #define LDR_MAX_DEFAULT 100
 #define LDR_HYSTERESIS 10
-#define LDR_X_DEFAULT 7
-#define LDR_Y_DEFAULT 9
+#define LDR_X_DEFAULT 5
+#define LDR_Y_DEFAULT 8
 #endif
 
 #ifdef BUZZER

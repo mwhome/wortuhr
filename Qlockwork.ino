@@ -20,7 +20,7 @@
 //
 //*****************************************************************************
 
-#define FIRMWARE_VERSION 20231219
+#define FIRMWARE_VERSION 20241114
 
 #include <Arduino.h>
 #include <Arduino_JSON.h>
@@ -2527,7 +2527,7 @@ ICACHE_RAM_ATTR void buttonModeInterrupt()
     {
         lastButtonPress = millis();
         lastModePress = lastButtonPress;
-    modeButtonStage = 0;
+        modeButtonStage = 0;
         buttonModePressed();
     }
 }
@@ -2780,8 +2780,8 @@ void handleRoot()
     }
 #endif
     message += F("<span style=\"font-size:12px;\">");
-        message += F("<br><br><a href=\"http://shop.bracci.ch/\">zytQuadrat</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> , <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a> and <a href=\"https://github.com/mwhome/wortuhr/\">weber</a>");
-        message += F("<br>Firmware: ") + String(FIRMWARE_VERSION);
+    message += F("<br><br><a href=\"http://shop.bracci.ch/\">zytQuadrat</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> , <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a> and <a href=\"https://github.com/mwhome/wortuhr/\">weber</a>");
+    message += F("<br>Firmware: ") + String(FIRMWARE_VERSION);
 #ifdef UPDATE_INFOSERVER
     if (updateInfo > int(FIRMWARE_VERSION))
         message += F("<br><span style=\"color:red;\">Firmwareupdate available! (") + String(updateInfo) + F(")</span>");

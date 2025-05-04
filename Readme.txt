@@ -442,6 +442,21 @@ Configuration.h - Hardware settings:
    001 021 022 041 042 061 062 081 082 101 103
 000                                           102
 
+#define LED_LAYOUT_VERTICAL_5       Vertical and corner and alarm LEDs (almost) within the strip. (As seen from the front.)
+
+000                    062                    103
+   001 021 022 041 042 061 063 082 083 102 104
+   002 020 023 040 043 060 064 081 084 101 105
+   003 019 024 039 044 059 065 080 085 100 106
+   004 018 025 038 045 058 066 079 086 099 107
+   005 017 026 037 046 057 067 078 087 098 108
+   006 016 027 036 047 056 068 077 088 097 109
+   007 015 028 035 048 055 069 076 089 096 110
+   008 014 029 034 049 054 067 075 090 095 111
+   009 013 030 033 050 053 071 074 091 094 112
+   010 012 031 032 051 052 072 073 092 093 113
+011                                           114
+
 ******************************************************************************
 Configuration.h - Misc:
 ******************************************************************************
@@ -533,6 +548,16 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20240227:
+Reverted special cases for HW v1.2. Made a separate branch (V1_2wButtons) for HW v1.2 which uses buttons.
+
+20240214:
+Added pin definitions for button and buzzer on HW v1.2.
+
+20240206:
+Introduced layout and board for QlockWiFive Mini v1.1.
+Fixed bug in SWISS GERMAN ZH dialect.
+
 20231219:
 Introduced settingsReset and factoryReset. 
 
